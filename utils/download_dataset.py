@@ -1,11 +1,11 @@
+import os
 import tarfile
 import urllib
 
-import os
+from utils.globals import UTILS_DIR_PATH
 
 DATA_SET_FILENAME_TAR = "cifar-10-python.tar.gz"
-SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-DATA_SET_FILENAME_PATH = os.path.join(SCRIPT_DIR, "..", DATA_SET_FILENAME_TAR)
+DATA_SET_FILENAME_PATH = os.path.join(UTILS_DIR_PATH, "..", DATA_SET_FILENAME_TAR)
 
 URL = "https://www.cs.toronto.edu/~kriz/" + DATA_SET_FILENAME_TAR
 
