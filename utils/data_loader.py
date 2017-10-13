@@ -1,6 +1,8 @@
 import os
-
-from utils.globals import DATA_SET_PATH
+import numpy as np
+import matplotlib.pyplot as plt
+import itertools
+from utils.globals import DATA_SET_PATH, RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y
 
 
 def unpickle(file):
@@ -27,6 +29,34 @@ class DataSet(object):
         return unpickle(path)
 
 
-if __name__ == "__main__":
+def get_data_set():
     data_set = DataSet()
     data_set.load_data(DATA_SET_PATH)
+    return data_set
+
+
+def transform_batch_format(x):
+    return x.reshape(len(x), RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y).transpose(0, 2, 3, 1)
+
+
+def visualize(x, y, grid_size=(4, 5)):
+    x_transformed = transform_batch_format(x)
+    fig, ax = plt.subplots(*grid_size, figsize=(12, 6))
+
+    def _plot_picture(dim_X, dim_y):
+        chosen_image = np.random.choice(range(len(x)))
+        ax[dim_X][dim_y].set_axis_off()
+        ax[dim_X][dim_y].text(0, 36, y[chosen_image])
+        ax[dim_X][dim_y].imshow(x_transformed[chosen_image])
+
+    for i, j in itertools.product(range(grid_size[0]), range(grid_size[1])):
+        _plot_picture(i, j)
+
+    plt.show()
+
+
+if __name__ == "__main__":
+    data_set = get_data_set()
+    X = data_set.data_batch[0]['data']
+    Y = [data_set.meta['label_names'][x] for x in data_set.data_batch[0]['labels']]
+    visualize(X, Y, (4,10))
