@@ -9,6 +9,7 @@ from skimage import data, color, exposure
 from utils.data_loader import get_data_set
 from utils.globals import PROJECT_PATH
 import numpy as np
+import liblinearutil
 
 
 class HogDataSet(object):
@@ -86,23 +87,29 @@ class HogTestDataSet(HogDataSet):
         self.hog_file = 'hog_test_pictures.npy'
 
 
+class FeatureLabelsDataSet(object):
+    def __init__(self):
+        self.train_features = None
+        self.train_labels = None
+        self.test_features = None
+        self.test_labels = None
+
+
+def linear_classifier(features):
+    prob = liblinearutil.problem(features.train_labels, features.train_features)
+    param = liblinearutil.parameter('-c 4 -B 1')
+    m = liblinearutil.train(prob, param)
+    p_label, p_acc, p_val = liblinearutil.predict(features.test_labels, features.test_features, m)
+
+
 if __name__ == "__main__":
-    # train_hog, train_labels = HogTrainDataSet().generate_hog_features(overwrite=True)
-    # test_hog, test_labels = HogTestDataSet().generate_hog_features(overwrite=True)
     data_set = get_data_set()
     hog_train_data_set = HogTrainDataSet(data_set)
     hog_test_data_set = HogTestDataSet(data_set)
 
-    train_hog, train_labels = hog_train_data_set.generate_hog_features(overwrite=True)
-    test_hog, test_labels = hog_test_data_set.generate_hog_features(overwrite=True)
-    hog_test_data_set.display_picture_with_hog()
+    features = FeatureLabelsDataSet()
+    features.train_features, features.train_labels = hog_train_data_set.generate_hog_features(overwrite=True)
+    features.test_features, features.test_labels = hog_train_data_set.generate_hog_features(overwrite=True)
 
-
-    # from liblinearutil import svm_read_problem, train, predict, problem, parameter
-    #
-    # prob = problem(train_labels, train_hog)
-    # param = parameter('-c 4 -B 1')
-    # m = train(prob, param)
-    # p_label, p_acc, p_val = predict(test_labels, test_hog, m)
-
+    linear_classifier(features)
     print "kk"
