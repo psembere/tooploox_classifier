@@ -1,9 +1,13 @@
+import os
+
 import matplotlib.pyplot as plt
 
 from skimage.feature import hog
 from skimage import data, color, exposure
 
 from utils.data_loader import get_data_set
+from utils.globals import PROJECT_PATH
+import numpy as np
 
 
 def display_picture_with_hog(picture):
@@ -36,16 +40,39 @@ def get_hog_features(pictures):
     return [get_single_hog(picture) for picture in pictures]
 
 
+def generate_hog_train_features():
+    file_name_train_hog = os.path.join(PROJECT_PATH, 'data', 'hog_train.npy')
+    file_name_train_labels = os.path.join(PROJECT_PATH, 'data', 'hog_train.npy')
+    if os.path.isfile(file_name_train_hog):
+        hog_train = np.load(file_name_train_hog)
+    else:
+        data_set = get_data_set()
+        pictures = data_set.get_training_pictures()
+        hog_train = get_hog_features(pictures)
+        np.save(file_name_train_hog, hog_train)
+        print("hog train generated")
+
+    if os.path.isfile(file_name_train_hog):
+        hog_labels = np.load(file_name_train_labels)
+    else:
+        data_set = get_data_set()
+        hog_labels = data_set.get_training_labels_indexes()
+        np.save(file_name_train_labels, hog_labels)
+
+    return hog_train, hog_labels
+
 
 if __name__ == "__main__":
-    data_set = get_data_set()
-    pictures = data_set.get_training_pictures()
+    hog_train, hog_labels = generate_hog_train_features()
 
-    pics =  data_set.get_test_picutres()
-    labels =  data_set.get_test_labels()
-    # display_picture_with_hog(pictures[0])
-    # hog_features = get_hog_features(pictures)
-    # from liblinearutil import *
-    #
-    # y, x = svm_read_problem('../heart_scale')
+    from liblinearutil import svm_read_problem, train, predict, problem, parameter
+
+    prob = problem(hog_labels, hog_train)
+    param = parameter('-c 4 -B 1')
+    m = train(prob, param)
+    # p_label, p_acc, p_val = predict(data_set.get_test_labels_indexes(), hog_test, m)
+
+
+
+
     print "kk"

@@ -38,16 +38,21 @@ class DataSet(object):
         transformed_batch_list = [self._transform_batch_format(batch['data']) for batch in self.data_batch]
         return list(itertools.chain.from_iterable(transformed_batch_list))
 
-    def get_training_labels(self):
-        batch_labels = list(itertools.chain(*[batch['labels'] for batch in self.data_batch]))
+    def get_training_labels_text(self):
+        batch_labels = self.get_training_labels_indexes()
         return [self.meta['label_names'][x] for x in batch_labels]
+
+    def get_training_labels_indexes(self):
+        return list(itertools.chain(*[batch['labels'] for batch in self.data_batch]))
 
     def get_test_picutres(self):
         return self._transform_batch_format(self.test_batch['data'])
 
-    def get_test_labels(self):
+    def get_test_labels_text(self):
         return [self.meta['label_names'][x] for x in self.test_batch['labels']]
 
+    def get_test_labels_indexes(self):
+        return self.test_batch['labels']
 
     @staticmethod
     def _transform_batch_format(x):
@@ -78,5 +83,5 @@ def visualize(x, y, grid_size=(4, 5)):
 if __name__ == "__main__":
     data_set = get_data_set()
     X = data_set.get_training_pictures()
-    Y = data_set.get_training_labels()
+    Y = data_set.get_training_labels_text()
     visualize(X, Y, (4, 10))
