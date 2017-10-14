@@ -40,9 +40,20 @@ def get_hog_features(pictures):
     return [get_single_hog(picture) for picture in pictures]
 
 
+def set_files_existance(file_path):
+    for key in file_path:
+        if os.path.isfile(key):
+            file_path[key] = False
+
+
+
 def generate_hog_train_features():
     file_name_train_hog = os.path.join(PROJECT_PATH, 'data', 'hog_train.npy')
     file_name_train_labels = os.path.join(PROJECT_PATH, 'data', 'hog_train.npy')
+    generate_files = {
+        os.path.join(PROJECT_PATH, 'data', 'hog_train.npy'): True,
+        os.path.join(PROJECT_PATH, 'data', 'hog_train.npy'): True
+    }
     if os.path.isfile(file_name_train_hog):
         hog_train = np.load(file_name_train_hog)
     else:
