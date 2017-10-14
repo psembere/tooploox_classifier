@@ -29,17 +29,12 @@ class DataSet(object):
         return unpickle(path)
 
     def get_whole_dataset_pictures(self):
-        data = []
-        for batch in self.data_batch:
-            data.extend(self._transform_batch_format(batch['data']))
-        return data
+        transformed_batch_list = [self._transform_batch_format(batch['data']) for batch in self.data_batch]
+        return list(itertools.chain.from_iterable(transformed_batch_list))
 
     def get_whole_dataset_labels(self):
-        data = []
-        for batch in self.data_batch:
-            Y = [data_set.meta['label_names'][x] for x in batch['labels']]
-            data.extend(Y)
-        return data
+        batch_labels = list(itertools.chain(*[batch['labels'] for batch in self.data_batch]))
+        return [self.meta['label_names'][x] for x in batch_labels]
 
     @staticmethod
     def _transform_batch_format(x):
