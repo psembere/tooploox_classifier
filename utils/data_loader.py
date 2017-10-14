@@ -34,13 +34,20 @@ class DataSet(object):
         path = os.path.join(data_set_path, 'data_batch_' + str(x))
         return unpickle(path)
 
-    def get_whole_dataset_pictures(self):
+    def get_training_pictures(self):
         transformed_batch_list = [self._transform_batch_format(batch['data']) for batch in self.data_batch]
         return list(itertools.chain.from_iterable(transformed_batch_list))
 
-    def get_whole_dataset_labels(self):
+    def get_training_labels(self):
         batch_labels = list(itertools.chain(*[batch['labels'] for batch in self.data_batch]))
         return [self.meta['label_names'][x] for x in batch_labels]
+
+    def get_test_picutres(self):
+        return self._transform_batch_format(self.test_batch['data'])
+
+    def get_test_labels(self):
+        return [self.meta['label_names'][x] for x in self.test_batch['labels']]
+
 
     @staticmethod
     def _transform_batch_format(x):
@@ -70,6 +77,6 @@ def visualize(x, y, grid_size=(4, 5)):
 
 if __name__ == "__main__":
     data_set = get_data_set()
-    X = data_set.get_whole_dataset_pictures()
-    Y = data_set.get_whole_dataset_labels()
+    X = data_set.get_training_pictures()
+    Y = data_set.get_training_labels()
     visualize(X, Y, (4, 10))

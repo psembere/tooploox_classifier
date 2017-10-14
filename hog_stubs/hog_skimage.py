@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 from skimage.feature import hog
 from skimage import data, color, exposure
 
-
-
 image = color.rgb2gray(data.astronaut())
 
 fd, hog_image = hog(image, orientations=8, pixels_per_cell=(16, 16),

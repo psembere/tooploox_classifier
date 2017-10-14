@@ -6,7 +6,11 @@ from skimage import data, color, exposure
 from utils.data_loader import get_data_set
 
 
-def display_picture_with_hog(image, hog_image):
+def display_picture_with_hog(picture):
+    image = color.rgb2gray(picture)
+    fd, hog_image = hog(image, orientations=8, pixels_per_cell=(4, 4),
+                        cells_per_block=(2, 2), visualize=True)
+
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4), sharex=True, sharey=True)
 
     ax1.axis('off')
@@ -24,10 +28,24 @@ def display_picture_with_hog(image, hog_image):
     plt.show()
 
 
+def get_hog_features(pictures):
+    def get_single_hog(picture):
+        image = color.rgb2gray(picture)
+        return hog(image, orientations=8, pixels_per_cell=(4, 4), cells_per_block=(2, 2))
+
+    return [get_single_hog(picture) for picture in pictures]
+
+
+
 if __name__ == "__main__":
     data_set = get_data_set()
-    pics = data_set.get_whole_dataset_pictures()
-    image = color.rgb2gray(pics[0])
-    fd, hog_image = hog(image, orientations=8, pixels_per_cell=(4, 4),
-                        cells_per_block=(2, 2), visualize=True)
-    display_picture_with_hog(image, hog_image)
+    pictures = data_set.get_training_pictures()
+
+    pics =  data_set.get_test_picutres()
+    labels =  data_set.get_test_labels()
+    # display_picture_with_hog(pictures[0])
+    # hog_features = get_hog_features(pictures)
+    # from liblinearutil import *
+    #
+    # y, x = svm_read_problem('../heart_scale')
+    print "kk"
