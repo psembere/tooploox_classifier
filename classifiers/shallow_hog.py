@@ -78,10 +78,10 @@ class HogTrainDataSet(HogDataSet):
         self.hog_file = 'hog_train_pictures.npy'
 
     def _get_labels(self):
-        return self.data_set.get_training_labels_indexes()
+        return self.data_set._get_training_labels_indexes()
 
     def _get_pictures(self):
-        return self.data_set.get_training_pictures()
+        return self.data_set._get_training_pictures()
 
 
 class HogTestDataSet(HogDataSet):
@@ -90,10 +90,10 @@ class HogTestDataSet(HogDataSet):
         self.hog_file = 'hog_test_pictures.npy'
 
     def _get_labels(self):
-        return self.data_set.get_testing_labels_indexes()
+        return self.data_set._get_testing_labels_indexes()
 
     def _get_pictures(self):
-        return self.data_set.get_testing_pictures()
+        return self.data_set._get_testing_pictures()
 
 
 if __name__ == "__main__":
