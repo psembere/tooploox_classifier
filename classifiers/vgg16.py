@@ -17,11 +17,16 @@ def get_vgg16_features(model, img_path, pictures, reload=False):
         features = generate_vgg16_features(model, img_path, pictures)
     return features
 
+
 def get_list_from_np(array):
     if type(array).__module__ == np.__name__:
         return array.tolist()
+    elif type(array[0]).__module__ == np.__name__:
+        return [ar.tolist() for ar in array]
     else:
         return array
+
+
 def generate_vgg16_features(model, img_path, pictures):
     features = []
     idx = 0
