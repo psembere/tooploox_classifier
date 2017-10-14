@@ -1,6 +1,5 @@
-import liblinearutil
-from classifiers.feature_data_set import FeaturesLabelsDataSet
 from classifiers.hog_features import HogTrainDataSet, HogTestDataSet
+from classifiers.svm_classifiers import linear_classifier, FeaturesLabelsDataSet
 from utils.data_loader import get_data_set
 
 
@@ -20,13 +19,6 @@ def get_hog_features(hog_params=None, overwrite=True, visualize=False):
     train_features_list, feature_set.train_labels = hog_train_data_set.generate_hog_features(overwrite)
     feature_set.train_features = [batch.tolist() for batch in train_features_list]
     return feature_set
-
-
-def linear_classifier(feature_set):
-    prob = liblinearutil.problem(feature_set.train_labels, feature_set.train_features)
-    param = liblinearutil.parameter('-c 4 -B 1')
-    m = liblinearutil.train(prob, param)
-    p_label, p_acc, p_val = liblinearutil.predict(feature_set.test_labels, feature_set.test_features, m)
 
 
 if __name__ == "__main__":

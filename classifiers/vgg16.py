@@ -6,7 +6,7 @@ from keras.applications.vgg16 import preprocess_input
 import numpy as np
 
 from classifiers import liblinearutil
-from classifiers.feature_data_set import FeaturesLabelsDataSet
+from classifiers.svm_classifiers import FeaturesLabelsDataSet, linear_classifier
 from utils.data_loader import get_data_set
 from utils.globals import PROJECT_PATH
 import os
@@ -34,13 +34,6 @@ def generate_vgg16_features(model, img_path, pictures):
     return features
 
 
-def linear_classifier(feature_set):
-    prob = liblinearutil.problem(feature_set.train_labels, feature_set.train_features)
-    param = liblinearutil.parameter('-c 4 -B 1')
-    m = liblinearutil.train(prob, param)
-    p_label, p_acc, p_val = liblinearutil.predict(feature_set.test_labels, feature_set.test_features, m)
-
-
 if __name__ == "__main__":
     model = VGG16(weights='imagenet', include_top=False)
 
@@ -63,4 +56,3 @@ if __name__ == "__main__":
     linear_classifier(features_labels_data_set)
 
     print "successfully ends"
-
