@@ -40,73 +40,45 @@ def get_hog_features(pictures):
     return [get_single_hog(picture) for picture in pictures]
 
 
-# def set_files_existance(file_path):
-#     for key in file_path:
-#         if os.path.isfile(key):
-#             file_path[key] = False
-
-
 
 def generate_hog_train_features():
     file_name_train_hog = os.path.join(PROJECT_PATH, 'data', 'hog_train_pictures.npy')
-    file_name_train_labels = os.path.join(PROJECT_PATH, 'data', 'hog_train_labels.npy')
-    # generate_files = {
-    #     os.path.join(PROJECT_PATH, 'data', 'hog_train.npy'): True,
-    #     os.path.join(PROJECT_PATH, 'data', 'hog_train.npy'): True
-    # }
-    # processed_dataset = {
-    #     'train_hog': None,
-    #     'train_labels': None,
-    #     'test_hog': None,
-    #     'test_labels': None
-    # }
-    # set_files_existance(generate_files)
-    #
-    # data_set = get_data_set()
-    #
-    # data_set_handlers = {
-    #     'train_hog': None,
-    #     'train_labels': None,
-    #     'test_hog': None,
-    #     'test_labels': None
-    # }
-    #
-    # for key in generate_files:
-    #     if generate_files[key]:
-
-
+    data_set = get_data_set()
     if os.path.isfile(file_name_train_hog):
         hog_train = np.load(file_name_train_hog)
     else:
-        data_set = get_data_set()
         pictures = data_set.get_training_pictures()
         hog_train = get_hog_features(pictures)
         np.save(file_name_train_hog, hog_train)
-        print("hog train generated")
+        print(file_name_train_hog + ' generated')
 
-    if os.path.isfile(file_name_train_labels):
-        hog_labels = np.load(file_name_train_labels)
+    return hog_train.tolist(), data_set.get_training_labels_indexes()
+
+
+def generate_hog_test_features():
+    file_name_test_hog = os.path.join(PROJECT_PATH, 'data', 'hog_test_pictures.npy')
+    data_set = get_data_set()
+    if os.path.isfile(file_name_test_hog):
+        hog_train = np.load(file_name_test_hog)
     else:
-        data_set = get_data_set()
-        hog_labels = data_set.get_training_labels_indexes()
-        np.save(file_name_train_labels, hog_labels)
+        pictures = data_set.get_testing_pictures()
+        hog_train = get_hog_features(pictures)
+        np.save(file_name_test_hog, hog_train)
+        print(file_name_test_hog + ' generated')
 
-    return hog_train, hog_labels
-
+    return hog_train.tolist(), data_set.get_testing_labels_indexes()
 
 if __name__ == "__main__":
-    hog_train, hog_labels = generate_hog_train_features()
+    data_set = get_data_set()
+    train_hog, train_labels = generate_hog_train_features()
+    test_hog, test_labels = generate_hog_test_features()
 
     from liblinearutil import svm_read_problem, train, predict, problem, parameter
 
-    train_lab = hog_labels.tolist()
-    train_pics = hog_train.tolist()
-    prob = problem(train_lab, train_pics)
+    prob = problem(train_labels, train_hog)
     param = parameter('-c 4 -B 1')
     m = train(prob, param)
-    # p_label, p_acc, p_val = predict(data_set.get_test_labels_indexes(), hog_test, m)
-
-
+    p_label, p_acc, p_val = predict(test_labels, test_hog, m)
 
 
     print "kk"

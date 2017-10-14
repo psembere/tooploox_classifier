@@ -9,7 +9,7 @@ from utils.globals import DATA_SET_PATH, RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y
 
 def unpickle(file):
     with open(file, 'rb') as fo:
-        if (sys.version_info > (3, 0)):
+        if sys.version_info > (3, 0):
             import pickle
             dict = pickle.load(fo, encoding='latin1')
         else:
@@ -45,13 +45,13 @@ class DataSet(object):
     def get_training_labels_indexes(self):
         return list(itertools.chain(*[batch['labels'] for batch in self.data_batch]))
 
-    def get_test_picutres(self):
+    def get_testing_pictures(self):
         return self._transform_batch_format(self.test_batch['data'])
 
-    def get_test_labels_text(self):
+    def get_testing_labels_text(self):
         return [self.meta['label_names'][x] for x in self.test_batch['labels']]
 
-    def get_test_labels_indexes(self):
+    def get_testing_labels_indexes(self):
         return self.test_batch['labels']
 
     @staticmethod
