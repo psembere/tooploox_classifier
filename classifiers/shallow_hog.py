@@ -53,6 +53,7 @@ class HogDataSet(object):
         hog_path = os.path.join(PROJECT_PATH, 'data', self.hog_file)
         if os.path.isfile(hog_path) and not overwrite:
             self.hog_data = np.load(hog_path)
+            print(hog_path + ' loaded')
         else:
             self.hog_data = self._get_hog_features(self.pictures)
             np.save(hog_path, self.hog_data)
@@ -108,8 +109,12 @@ if __name__ == "__main__":
     hog_test_data_set = HogTestDataSet(data_set)
 
     features = FeatureLabelsDataSet()
-    features.train_features, features.train_labels = hog_train_data_set.generate_hog_features(overwrite=True)
-    features.test_features, features.test_labels = hog_train_data_set.generate_hog_features(overwrite=True)
+    overwrite = False
+    train_features_list, features.train_labels = hog_train_data_set.generate_hog_features(overwrite)
+    test_features_list, features.test_labels = hog_test_data_set.generate_hog_features(overwrite)
+
+    features.train_features = [batch.tolist() for batch in train_features_list]
+    features.test_features = [batch.tolist() for batch in test_features_list]
 
     linear_classifier(features)
     print "kk"
