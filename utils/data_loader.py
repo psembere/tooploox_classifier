@@ -51,6 +51,9 @@ class DataSet(object):
     def get_training_labels_text(self):
         return [self._meta['label_names'][x] for x in self.training_pictures_labels]
 
+    def get_testing_labels_text(self):
+        return [self._meta['label_names'][x] for x in self.testing_pictures_labels]
+
     @staticmethod
     def _transform_batch_format(x):
         return x.reshape(len(x), RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y).transpose(0, 2, 3, 1)

@@ -13,32 +13,35 @@ import numpy as np
 
 class HogDataSet(object):
     def __init__(self):
-        self.data_set = get_data_set()
+        self.pictures = None
+        self.labels = None
+        self.labels_text = None
+
         self.hog_file = None
-        self.hog_paramters = {
+        self.hog_params = {
             'orientations': 8,
             'pixels_per_cell': (3, 3),
             'cells_per_block': (2, 2)
         }
+        self.hog_data = None
 
     def display_picture_with_hog(self, idx=0):
-        picture = self.data_set._transform_batch_format(self.data_set.data_batch[0]['data'])[idx]
-        image = color.rgb2gray(picture)
-        params = deepcopy(self.hog_paramters)
+        image = color.rgb2gray(self.pictures[idx])
+        params = deepcopy(self.hog_params)
         params['visualize'] = True
         params['image'] = image
         fd, hog_image = hog(**params)
 
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4), sharex=True, sharey=True)
+        self._plot_hog(idx, image, hog_image)
 
+    def _plot_hog(self, idx, image, hog_image):
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4), sharex=True, sharey=True)
         ax1.axis('off')
         ax1.imshow(image, cmap=plt.cm.gray)
-        ax1.set_title('Input image')
+        ax1.set_title('Input image ' + self.labels_text[idx])
         ax1.set_adjustable('box-forced')
-
         # Rescale histogram for better display
         hog_image_rescaled = exposure.rescale_intensity(hog_image, in_range=(0, 0.02))
-
         ax2.axis('off')
         ax2.imshow(hog_image_rescaled, cmap=plt.cm.gray)
         ax2.set_title('Histogram of Oriented Gradients')
@@ -48,20 +51,13 @@ class HogDataSet(object):
     def generate_hog_features(self, overwrite=False):
         hog_path = os.path.join(PROJECT_PATH, 'data', self.hog_file)
         if os.path.isfile(hog_path) and not overwrite:
-            hog_data = np.load(hog_path)
+            self.hog_data = np.load(hog_path)
         else:
-            pictures = self._get_pictures()
-            hog_data = self._get_hog_features(pictures)
-            np.save(hog_path, hog_data)
+            self.hog_data = self._get_hog_features(self.pictures)
+            np.save(hog_path, self.hog_data)
             print(hog_path + ' generated')
 
-        return hog_data, self._get_labels()
-
-    def _get_pictures(self):
-        pass
-
-    def _get_labels(self):
-        pass
+        return self.hog_data, self.labels
 
     @staticmethod
     def _get_hog_features(pictures):
@@ -73,36 +69,34 @@ class HogDataSet(object):
 
 
 class HogTrainDataSet(HogDataSet):
-    def __init__(self):
+    def __init__(self, data_set):
         super(HogTrainDataSet, self).__init__()
+        self.pictures = data_set.training_pictures
+        self.labels = data_set.training_pictures_labels
+        self.labels_text = data_set.get_training_labels_text()
         self.hog_file = 'hog_train_pictures.npy'
-
-    def _get_labels(self):
-        return self.data_set._get_training_labels_indexes()
-
-    def _get_pictures(self):
-        return self.data_set._get_training_pictures()
 
 
 class HogTestDataSet(HogDataSet):
-    def __init__(self):
+    def __init__(self, data_set):
         super(HogTestDataSet, self).__init__()
+        self.pictures = data_set.testing_pictures
+        self.labels = data_set.testing_pictures_labels
+        self.labels_text = data_set.get_testing_labels_text()
         self.hog_file = 'hog_test_pictures.npy'
-
-    def _get_labels(self):
-        return self.data_set._get_testing_labels_indexes()
-
-    def _get_pictures(self):
-        return self.data_set._get_testing_pictures()
 
 
 if __name__ == "__main__":
     # train_hog, train_labels = HogTrainDataSet().generate_hog_features(overwrite=True)
     # test_hog, test_labels = HogTestDataSet().generate_hog_features(overwrite=True)
-    test_hog, test_labels = HogTestDataSet().generate_hog_features()
-    a = HogDataSet().display_picture_with_hog()
+    data_set = get_data_set()
+    hog_train_data_set = HogTrainDataSet(data_set)
+    hog_test_data_set = HogTestDataSet(data_set)
 
-    b = 3
+    train_hog, train_labels = hog_train_data_set.generate_hog_features(overwrite=True)
+    test_hog, test_labels = hog_test_data_set.generate_hog_features(overwrite=True)
+    hog_test_data_set.display_picture_with_hog()
+
 
     # from liblinearutil import svm_read_problem, train, predict, problem, parameter
     #
