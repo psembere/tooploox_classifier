@@ -2,13 +2,19 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import itertools
+import sys
+
 from utils.globals import DATA_SET_PATH, RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y
 
 
 def unpickle(file):
-    import cPickle
     with open(file, 'rb') as fo:
-        dict = cPickle.load(fo)
+        if (sys.version_info > (3, 0)):
+            import pickle
+            dict = pickle.load(fo, encoding='latin1')
+        else:
+            import cPickle
+            dict = cPickle.load(fo)
     return dict
 
 
