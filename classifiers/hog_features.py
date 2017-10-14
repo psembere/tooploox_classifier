@@ -10,17 +10,14 @@ from skimage import data, color, exposure
 
 
 class HogDataSet(object):
-    def __init__(self):
+    def __init__(self, visualize=False):
         self.pictures = None
         self.labels = None
-        self.labels_text = None
+        if visualize:
+            self.labels_text = ""
 
-        self.hog_file = None
-        self.hog_params = {
-            'orientations': 8,
-            'pixels_per_cell': (3, 3),
-            'cells_per_block': (2, 2)
-        }
+        self.hog_file = ""
+        self.hog_params = dict()
         self.hog_data = None
 
     def display_picture_with_hog(self, idx=0):
@@ -58,28 +55,33 @@ class HogDataSet(object):
 
         return self.hog_data, self.labels
 
-    @staticmethod
-    def _get_hog_features(pictures):
-        def get_single_hog(picture):
-            image = color.rgb2gray(picture)
-            return hog(image, orientations=8, pixels_per_cell=(4, 4), cells_per_block=(2, 2))
+    def _get_hog_features(self, pictures):
+        def get_single_hog(pic, hog_params):
+            image = color.rgb2gray(pic)
+            hog_params['image'] = image
+            return hog(**hog_params)
 
-        return [get_single_hog(picture) for picture in pictures]
+        params = deepcopy(self.hog_params)
+        return [get_single_hog(picture, params) for picture in pictures]
 
 
 class HogTrainDataSet(HogDataSet):
-    def __init__(self, data_set):
-        super(HogTrainDataSet, self).__init__()
+    def __init__(self, data_set, hog_params=None, visualize=False):
+        super(HogTrainDataSet, self).__init__(visualize)
         self.pictures = data_set.training_pictures
         self.labels = data_set.training_pictures_labels
-        self.labels_text = data_set.get_training_labels_text()
+        if visualize:
+            self.labels_text = data_set.get_training_labels_text()
         self.hog_file = 'hog_train_pictures.npy'
+        self.hog_params = hog_params if hog_params else dict()
 
 
 class HogTestDataSet(HogDataSet):
-    def __init__(self, data_set):
+    def __init__(self, data_set, hog_params=None, visualize=False):
         super(HogTestDataSet, self).__init__()
         self.pictures = data_set.testing_pictures
         self.labels = data_set.testing_pictures_labels
-        self.labels_text = data_set.get_testing_labels_text()
+        if visualize:
+            self.labels_text = data_set.get_testing_labels_text()
         self.hog_file = 'hog_test_pictures.npy'
+        self.hog_params = hog_params if hog_params else dict()
