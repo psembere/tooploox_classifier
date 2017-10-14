@@ -32,46 +32,65 @@ def display_picture_with_hog(picture):
     plt.show()
 
 
-def get_hog_features(pictures):
-    def get_single_hog(picture):
-        image = color.rgb2gray(picture)
-        return hog(image, orientations=8, pixels_per_cell=(4, 4), cells_per_block=(2, 2))
+class HogDataSet(object):
+    def __init__(self):
+        self.data_set = get_data_set()
+        self.hog_file = None
 
-    return [get_single_hog(picture) for picture in pictures]
+    def generate_hog_features(self, overwrite=False):
+        hog_path = os.path.join(PROJECT_PATH, 'data', self.hog_file)
+        if os.path.isfile(hog_path) and not overwrite:
+            hog_data = np.load(hog_path).tolist()
+        else:
+            pictures = self._get_pictures()
+            hog_data = self._get_hog_features(pictures)
+            np.save(hog_path, hog_data)
+            print(hog_path + ' generated')
+
+        return hog_data, self._get_labels()
+
+    def _get_pictures(self):
+        pass
+
+    def _get_labels(self):
+        pass
+
+    @staticmethod
+    def _get_hog_features(pictures):
+        def get_single_hog(picture):
+            image = color.rgb2gray(picture)
+            return hog(image, orientations=8, pixels_per_cell=(4, 4), cells_per_block=(2, 2))
+
+        return [get_single_hog(picture) for picture in pictures]
 
 
+class HogTrainDataSet(HogDataSet):
+    def __init__(self):
+        super(HogTrainDataSet, self).__init__()
+        self.hog_file = 'hog_train_pictures.npy'
 
-def generate_hog_train_features():
-    file_name_train_hog = os.path.join(PROJECT_PATH, 'data', 'hog_train_pictures.npy')
-    data_set = get_data_set()
-    if os.path.isfile(file_name_train_hog):
-        hog_train = np.load(file_name_train_hog)
-    else:
-        pictures = data_set.get_training_pictures()
-        hog_train = get_hog_features(pictures)
-        np.save(file_name_train_hog, hog_train)
-        print(file_name_train_hog + ' generated')
+    def _get_labels(self):
+        return self.data_set.get_training_labels_indexes()
 
-    return hog_train.tolist(), data_set.get_training_labels_indexes()
+    def _get_pictures(self):
+        return self.data_set.get_training_pictures()
 
 
-def generate_hog_test_features():
-    file_name_test_hog = os.path.join(PROJECT_PATH, 'data', 'hog_test_pictures.npy')
-    data_set = get_data_set()
-    if os.path.isfile(file_name_test_hog):
-        hog_train = np.load(file_name_test_hog)
-    else:
-        pictures = data_set.get_testing_pictures()
-        hog_train = get_hog_features(pictures)
-        np.save(file_name_test_hog, hog_train)
-        print(file_name_test_hog + ' generated')
+class HogTestDataSet(HogDataSet):
+    def __init__(self):
+        super(HogTestDataSet, self).__init__()
+        self.hog_file = 'hog_train_pictures.npy'
 
-    return hog_train.tolist(), data_set.get_testing_labels_indexes()
+    def _get_labels(self):
+        return self.data_set.get_testing_labels_indexes()
+
+    def _get_pictures(self):
+        return self.data_set.get_testing_labels_indexes()
+
 
 if __name__ == "__main__":
-    data_set = get_data_set()
-    train_hog, train_labels = generate_hog_train_features()
-    test_hog, test_labels = generate_hog_test_features()
+    train_hog, train_labels = HogTrainDataSet().generate_hog_features(overwrite=True)
+    test_hog, test_labels = HogTrainDataSet().generate_hog_features(overwrite=True)
 
     from liblinearutil import svm_read_problem, train, predict, problem, parameter
 
@@ -79,6 +98,5 @@ if __name__ == "__main__":
     param = parameter('-c 4 -B 1')
     m = train(prob, param)
     p_label, p_acc, p_val = predict(test_labels, test_hog, m)
-
 
     print "kk"
