@@ -43,14 +43,14 @@ def visualize(x, y, grid_size=(4, 5)):
     x_transformed = transform_batch_format(x)
     fig, ax = plt.subplots(*grid_size, figsize=(12, 6))
 
-    def _plot_picture(dim_X, dim_y):
+    def plot_picture(dim_x, dim_y):
         chosen_image = np.random.choice(range(len(x)))
-        ax[dim_X][dim_y].set_axis_off()
-        ax[dim_X][dim_y].text(0, 36, y[chosen_image])
-        ax[dim_X][dim_y].imshow(x_transformed[chosen_image])
+        ax[dim_x][dim_y].set_axis_off()
+        ax[dim_x][dim_y].text(0, 36, y[chosen_image])
+        ax[dim_x][dim_y].imshow(x_transformed[chosen_image])
 
     for i, j in itertools.product(range(grid_size[0]), range(grid_size[1])):
-        _plot_picture(i, j)
+        plot_picture(i, j)
 
     plt.show()
 
@@ -59,4 +59,4 @@ if __name__ == "__main__":
     data_set = get_data_set()
     X = data_set.data_batch[0]['data']
     Y = [data_set.meta['label_names'][x] for x in data_set.data_batch[0]['labels']]
-    visualize(X, Y, (4,10))
+    visualize(X, Y, (4, 10))
