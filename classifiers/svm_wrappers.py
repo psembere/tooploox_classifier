@@ -1,4 +1,4 @@
-from classifiers import liblinearutil
+from lib_svm import liblinearutil
 
 
 def linear_classifier(feature_set):

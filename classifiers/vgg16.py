@@ -1,18 +1,16 @@
-from keras.preprocessing import image
-
-from keras.applications.vgg16 import VGG16
-from keras.applications.vgg16 import preprocess_input
-
-import numpy as np
-
-from classifiers import liblinearutil
-from classifiers.svm_classifiers import FeaturesLabelsDataSet, linear_classifier
-from utils.data_loader import get_data_set
-from utils.globals import PROJECT_PATH
 import os
 
+import numpy as np
+from keras.applications.vgg16 import VGG16
+from keras.applications.vgg16 import preprocess_input
+from keras.preprocessing import image
 
-def get_vgg16_features(model, img_path, pictures, reload=False, ):
+from classifiers.svm_wrappers import FeaturesLabelsDataSet, linear_classifier
+from utils.data_loader import get_data_set
+from utils.globals import PROJECT_PATH
+
+
+def get_vgg16_features(model, img_path, pictures, reload=False):
     if os.path.isfile(img_path) and not reload:
         features = np.load(img_path)
     else:
@@ -28,13 +26,14 @@ def generate_vgg16_features(model, img_path, pictures):
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
         features.append(model.predict(x)[0][0][0])
-        print(idx)
+        if idx % 10 == 0:
+            print(idx)
         idx += 1
     np.save(img_path, features)
     return features
 
 
-def get_features(model, ):
+def get_features(model, reload=False):
     data_set = get_data_set()
     pictures_train = data_set.training_pictures
     pictures_test = data_set.testing_pictures
@@ -42,8 +41,8 @@ def get_features(model, ):
     img_path_train = os.path.join(PROJECT_PATH, 'data', 'vgg16_train.npy')
     img_path_test = os.path.join(PROJECT_PATH, 'data', 'vgg16_test.npy')
 
-    features_test = get_vgg16_features(model, img_path_test, pictures_test)
-    features_train = get_vgg16_features(model, img_path_train, pictures_train)
+    features_test = get_vgg16_features(model, img_path_test, pictures_test, reload)
+    features_train = get_vgg16_features(model, img_path_train, pictures_train, reload)
 
     features_labels_data_set = FeaturesLabelsDataSet()
     features_labels_data_set.train_features = features_train.tolist()
@@ -57,7 +56,7 @@ def get_features(model, ):
 if __name__ == "__main__":
     model = VGG16(weights='imagenet', include_top=False)
 
-    features = get_features(model)
+    features = get_features(model, reload=True)
 
     linear_classifier(features)
 

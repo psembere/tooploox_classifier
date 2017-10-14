@@ -1,5 +1,5 @@
 from classifiers.hog_features import HogTrainDataSet, HogTestDataSet
-from classifiers.svm_classifiers import linear_classifier, FeaturesLabelsDataSet
+from classifiers.svm_wrappers import linear_classifier, FeaturesLabelsDataSet
 from utils.data_loader import get_data_set
 
 
