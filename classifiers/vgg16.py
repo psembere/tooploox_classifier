@@ -17,7 +17,11 @@ def get_vgg16_features(model, img_path, pictures, reload=False):
         features = generate_vgg16_features(model, img_path, pictures)
     return features
 
-
+def get_list_from_np(array):
+    if type(array).__module__ == np.__name__:
+        return array.tolist()
+    else:
+        return array
 def generate_vgg16_features(model, img_path, pictures):
     features = []
     idx = 0
@@ -26,7 +30,7 @@ def generate_vgg16_features(model, img_path, pictures):
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
         features.append(model.predict(x)[0][0][0])
-        if idx % 10 == 0:
+        if idx % 1000 == 0:
             print(idx)
         idx += 1
     np.save(img_path, features)
@@ -45,10 +49,10 @@ def get_features(model, reload=False):
     features_train = get_vgg16_features(model, img_path_train, pictures_train, reload)
 
     features_labels_data_set = FeaturesLabelsDataSet()
-    features_labels_data_set.train_features = features_train.tolist()
-    features_labels_data_set.test_features = features_test.tolist()
-    features_labels_data_set.train_labels = data_set.training_pictures_labels
-    features_labels_data_set.test_labels = data_set.testing_pictures_labels
+    features_labels_data_set.train_features = get_list_from_np(features_train)
+    features_labels_data_set.test_features = get_list_from_np(features_test)
+    features_labels_data_set.train_labels = get_list_from_np(data_set.training_pictures_labels)
+    features_labels_data_set.test_labels = get_list_from_np(data_set.testing_pictures_labels)
 
     return features_labels_data_set
 
@@ -56,7 +60,7 @@ def get_features(model, reload=False):
 if __name__ == "__main__":
     model = VGG16(weights='imagenet', include_top=False)
 
-    features = get_features(model, reload=True)
+    features = get_features(model, reload=False)
 
     linear_classifier(features)
 
