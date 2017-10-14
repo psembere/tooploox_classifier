@@ -1,14 +1,8 @@
 import liblinearutil
+from classifiers.feature_data_set import FeaturesLabelsDataSet
 from classifiers.hog_features import HogTrainDataSet, HogTestDataSet
 from utils.data_loader import get_data_set
 
-
-class FeatureLabelsDataSet(object):
-    def __init__(self):
-        self.train_features = None
-        self.train_labels = None
-        self.test_features = None
-        self.test_labels = None
 
 def get_hog_features(hog_params=None, overwrite=True, visualize=False):
     data_set = get_data_set()
@@ -17,7 +11,7 @@ def get_hog_features(hog_params=None, overwrite=True, visualize=False):
     if visualize:
         hog_train_data_set.display_picture_with_hog()
 
-    feature_set = FeatureLabelsDataSet()
+    feature_set = FeaturesLabelsDataSet()
 
     test_features_list, feature_set.test_labels = hog_test_data_set.generate_hog_features(overwrite)
     feature_set.test_features = [batch.tolist() for batch in test_features_list]
