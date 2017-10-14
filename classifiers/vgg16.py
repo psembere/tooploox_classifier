@@ -34,9 +34,7 @@ def generate_vgg16_features(model, img_path, pictures):
     return features
 
 
-if __name__ == "__main__":
-    model = VGG16(weights='imagenet', include_top=False)
-
+def get_features(model, ):
     data_set = get_data_set()
     pictures_train = data_set.training_pictures
     pictures_test = data_set.testing_pictures
@@ -53,6 +51,14 @@ if __name__ == "__main__":
     features_labels_data_set.train_labels = data_set.training_pictures_labels
     features_labels_data_set.test_labels = data_set.testing_pictures_labels
 
-    linear_classifier(features_labels_data_set)
+    return features_labels_data_set
+
+
+if __name__ == "__main__":
+    model = VGG16(weights='imagenet', include_top=False)
+
+    features = get_features(model)
+
+    linear_classifier(features)
 
     print "successfully ends"
