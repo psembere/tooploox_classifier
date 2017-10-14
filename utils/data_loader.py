@@ -28,6 +28,23 @@ class DataSet(object):
         path = os.path.join(data_set_path, 'data_batch_' + str(x))
         return unpickle(path)
 
+    def get_whole_dataset_pictures(self):
+        data = []
+        for batch in self.data_batch:
+            data.extend(self._transform_batch_format(batch['data']))
+        return data
+
+    def get_whole_dataset_labels(self):
+        data = []
+        for batch in self.data_batch:
+            Y = [data_set.meta['label_names'][x] for x in batch['labels']]
+            data.extend(Y)
+        return data
+
+    @staticmethod
+    def _transform_batch_format(x):
+        return x.reshape(len(x), RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y).transpose(0, 2, 3, 1)
+
 
 def get_data_set():
     data_set = DataSet()
@@ -35,19 +52,14 @@ def get_data_set():
     return data_set
 
 
-def transform_batch_format(x):
-    return x.reshape(len(x), RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y).transpose(0, 2, 3, 1)
-
-
 def visualize(x, y, grid_size=(4, 5)):
-    x_transformed = transform_batch_format(x)
     fig, ax = plt.subplots(*grid_size, figsize=(12, 6))
 
     def plot_picture(dim_x, dim_y):
         chosen_image = np.random.choice(range(len(x)))
         ax[dim_x][dim_y].set_axis_off()
         ax[dim_x][dim_y].text(0, 36, y[chosen_image])
-        ax[dim_x][dim_y].imshow(x_transformed[chosen_image])
+        ax[dim_x][dim_y].imshow(x[chosen_image])
 
     for i, j in itertools.product(range(grid_size[0]), range(grid_size[1])):
         plot_picture(i, j)
@@ -57,6 +69,6 @@ def visualize(x, y, grid_size=(4, 5)):
 
 if __name__ == "__main__":
     data_set = get_data_set()
-    X = data_set.data_batch[0]['data']
-    Y = [data_set.meta['label_names'][x] for x in data_set.data_batch[0]['labels']]
+    X = data_set.get_whole_dataset_pictures()
+    Y = data_set.get_whole_dataset_labels()
     visualize(X, Y, (4, 10))
