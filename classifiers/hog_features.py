@@ -62,7 +62,7 @@ class HogDataSet(object):
             return hog(**hog_params)
 
         params = deepcopy(self.hog_params)
-        return [get_single_hog(picture, params) for picture in pictures]
+        return np.array([get_single_hog(picture, params) for picture in pictures])
 
 
 class HogTrainDataSet(HogDataSet):

@@ -12,12 +12,12 @@ def get_hog_features(hog_params=None, overwrite=True, visualize=False):
 
     feature_set = FeaturesLabelsDataSet()
 
-    test_features_list, feature_set.test_labels = hog_test_data_set.generate_hog_features(overwrite)
-    feature_set.test_features = [batch.tolist() for batch in test_features_list]
+    test_features_np, feature_set.test_labels = hog_test_data_set.generate_hog_features(overwrite)
+    feature_set.test_features = test_features_np.tolist()
     print("Number of features: " + str(len(feature_set.test_features[0])))
 
     train_features_list, feature_set.train_labels = hog_train_data_set.generate_hog_features(overwrite)
-    feature_set.train_features = [batch.tolist() for batch in train_features_list]
+    feature_set.train_features = train_features_list.tolist()
     return feature_set
 
 
