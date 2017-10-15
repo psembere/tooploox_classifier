@@ -7,7 +7,7 @@ from keras.preprocessing import image
 
 from classifiers.svm_wrappers import FeaturesLabelsDataSet, linear_classifier
 from utils.data_loader import get_data_set
-from utils.globals import PROJECT_PATH
+from utils.globals import PROJECT_PATH, SERIALIZED_DATA_PATH
 
 
 def get_vgg16_features(model, img_path, pictures, reload=False):
@@ -47,8 +47,8 @@ def get_features(model, reload=False):
     pictures_train = data_set.training_pictures
     pictures_test = data_set.testing_pictures
 
-    img_path_train = os.path.join(PROJECT_PATH, 'data', 'vgg16_train.npy')
-    img_path_test = os.path.join(PROJECT_PATH, 'data', 'vgg16_test.npy')
+    img_path_train = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_train.npy')
+    img_path_test = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_test.npy')
 
     features_test = get_vgg16_features(model, img_path_test, pictures_test, reload)
     features_train = get_vgg16_features(model, img_path_train, pictures_train, reload)

@@ -1,3 +1,4 @@
+import functools
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,15 +8,19 @@ import sys
 from utils.globals import DATA_SET_PATH, RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y
 
 
-def unpickle(file):
-    with open(file, 'rb') as fo:
-        if sys.version_info > (3, 0):
-            import pickle
-            loaded_data = pickle.load(fo, encoding='latin1')
-        else:
-            import cPickle
-            loaded_data = cPickle.load(fo)
-    return loaded_data
+def unpickle(file_path):
+    unpickler = _get_unpickler()
+    with open(file_path, 'rb') as file_handler:
+        return unpickler(file_handler)
+
+
+def _get_unpickler():
+    if sys.version_info > (3, 0):
+        import pickle as pickle
+        return functools.partial(pickle.load, encoding='latin1')
+    else:
+        import cPickle as pickle
+        return pickle.load
 
 
 class DataSet(object):

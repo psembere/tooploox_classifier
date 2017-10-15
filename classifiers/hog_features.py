@@ -4,7 +4,7 @@ from copy import deepcopy
 import numpy as np
 from matplotlib import pyplot as plt
 
-from utils.globals import PROJECT_PATH
+from utils.globals import SERIALIZED_DATA_PATH
 from skimage.feature import hog
 from skimage import data, color, exposure
 
@@ -44,7 +44,7 @@ class HogDataSet(object):
         plt.show()
 
     def generate_hog_features(self, overwrite=False):
-        hog_path = os.path.join(PROJECT_PATH, 'data', self.hog_file)
+        hog_path = os.path.join(SERIALIZED_DATA_PATH, self.hog_file)
         if os.path.isfile(hog_path) and not overwrite:
             self.hog_data = np.load(hog_path)
             print(hog_path + ' loaded')
