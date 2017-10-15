@@ -15,12 +15,13 @@ def unpickle(file_path):
 
 
 def _get_unpickler():
-    if sys.version_info > (3, 0):
-        import pickle as pickle
-        return functools.partial(pickle.load, encoding='latin1')
-    else:
+    if sys.version_info[0] < 3:
         import cPickle as pickle
         return pickle.load
+    else:
+
+        import pickle as pickle
+        return functools.partial(pickle.load, encoding='latin1')
 
 
 class DataSet(object):
@@ -65,9 +66,9 @@ class DataSet(object):
 
 
 def get_data_set():
-    data_set = DataSet()
-    data_set.load_data(EXTRACTED_DATA_SET_PATH)
-    return data_set
+    loaded_data_set = DataSet()
+    loaded_data_set.load_data(EXTRACTED_DATA_SET_PATH)
+    return loaded_data_set
 
 
 def visualize(x, y, grid_size=(4, 5)):

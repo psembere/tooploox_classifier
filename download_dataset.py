@@ -1,14 +1,18 @@
 import os
 import tarfile
-import urllib
+import sys
 
 TAR_DATA_SET_FILENAME = "cifar-10-python.tar.gz"
 URL = "https://www.cs.toronto.edu/~kriz/" + TAR_DATA_SET_FILENAME
 
 
 def download_data_set():
-    dataset_zipped = urllib.URLopener()
-    dataset_zipped.retrieve(URL, TAR_DATA_SET_FILENAME)
+    if sys.version_info[0] < 3:
+        import urllib
+        urllib.URLopener().retrieve(URL, TAR_DATA_SET_FILENAME)
+    else:
+        import urllib.request
+        urllib.request.urlretrieve(URL, TAR_DATA_SET_FILENAME)
 
 
 def extract():
