@@ -1,18 +1,21 @@
 import os
 
 import numpy as np
+
 from keras.applications.vgg16 import VGG16
 from keras.applications.vgg16 import preprocess_input
 from keras.preprocessing import image as keras_image
 
 from data_set_deserializer import get_data_set
-from t_sne import visualize_features_sklearn_tsne, visualize_features_tsne
 from globals import SERIALIZED_DATA_PATH
 from svm_wrappers import FeaturesDataSet, linear_classifier
 
 
 class Vgg16FeatureDataSet(object):
     def __init__(self):
+        self.model = None
+
+    def _set_model(self):
         self.model = VGG16(weights='imagenet', include_top=False)
 
     def get_features(self, overwrite=False):
@@ -41,6 +44,8 @@ class Vgg16FeatureDataSet(object):
         if os.path.isfile(features_path) and not overwrite:
             return np.load(features_path)
         else:
+            if not self.model:
+                self._set_model()
             vgg_features = np.array([self._get_cnn_code(idx, image) for idx, image in enumerate(pictures)])
             np.save(features_path, vgg_features)
             return vgg_features
@@ -54,9 +59,4 @@ class Vgg16FeatureDataSet(object):
         return self.model.predict(x)[0][0][0]
 
 
-if __name__ == "__main__":
-    features = Vgg16FeatureDataSet().get_features(overwrite=False)
-    #linear_classifier(features)
-    #visualize_features_tsne(features)
-    visualize_features_sklearn_tsne(features)
-    print("successfully ends")
+
