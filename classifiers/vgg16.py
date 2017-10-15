@@ -10,11 +10,11 @@ from globals import SERIALIZED_DATA_PATH
 from svm_wrappers import FeaturesLabelsDataSet, linear_classifier
 
 
-def get_vgg16_features(model, img_path, pictures, reload=False):
+def get_vgg16_features(cnn_model, img_path, pictures, reload=False):
     if os.path.isfile(img_path) and not reload:
         features = np.load(img_path)
     else:
-        features = generate_vgg16_features(model, img_path, pictures)
+        features = generate_vgg16_features(cnn_model, img_path, pictures)
     return features
 
 
