@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import itertools
 import sys
 
-from globals import DATA_SET_PATH, RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y
+from globals import EXTRACTED_DATA_SET_PATH, RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y
 
 
 def unpickle(file_path):
@@ -66,7 +66,7 @@ class DataSet(object):
 
 def get_data_set():
     data_set = DataSet()
-    data_set.load_data(DATA_SET_PATH)
+    data_set.load_data(EXTRACTED_DATA_SET_PATH)
     return data_set
 
 

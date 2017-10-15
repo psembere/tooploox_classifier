@@ -1,4 +1,4 @@
-from lib_svm import liblinearutil
+import svm_utils.lib_svm.liblinearutil as liblinearutil
 
 
 def linear_classifier(feature_set):

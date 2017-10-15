@@ -5,9 +5,9 @@ from keras.applications.vgg16 import VGG16
 from keras.applications.vgg16 import preprocess_input
 from keras.preprocessing import image
 
+from data_set_deserializer import get_data_set
+from globals import SERIALIZED_DATA_PATH
 from svm_wrappers import FeaturesLabelsDataSet, linear_classifier
-from utils.data_loader import get_data_set
-from utils.globals import SERIALIZED_DATA_PATH
 
 
 def get_vgg16_features(model, img_path, pictures, reload=False):
@@ -69,4 +69,4 @@ if __name__ == "__main__":
 
     linear_classifier(features)
 
-    print "successfully ends"
+    print("successfully ends")

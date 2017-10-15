@@ -3,10 +3,10 @@ from copy import deepcopy
 
 import numpy as np
 from matplotlib import pyplot as plt
-
-from utils.globals import SERIALIZED_DATA_PATH
+from skimage import color, exposure
 from skimage.feature import hog
-from skimage import data, color, exposure
+
+from globals import SERIALIZED_DATA_PATH
 
 
 class HogDataSet(object):

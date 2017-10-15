@@ -1,6 +1,6 @@
-from classifiers.hog_features import HogTrainDataSet, HogTestDataSet
-from classifiers.svm_wrappers import linear_classifier, FeaturesLabelsDataSet
-from utils.data_loader import get_data_set
+from hog_features import HogTrainDataSet, HogTestDataSet
+from svm_wrappers import linear_classifier, FeaturesLabelsDataSet
+from data_set_deserializer import get_data_set
 
 
 def get_hog_features(hog_params=None, overwrite=True, visualize=False):
@@ -30,4 +30,4 @@ if __name__ == "__main__":
     features = get_hog_features(hog_parameters, overwrite=False, visualize=False)
 
     linear_classifier(features)
-    print "successfully ends"
+    print("successfully ends")
