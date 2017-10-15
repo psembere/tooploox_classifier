@@ -79,9 +79,9 @@ WORKDIR $HOME/libsvm/python
 RUN make
 WORKDIR $HOME
 
-RUN cp liblinear/liblinear.so.1 tooplox_classifier/classifiers/svm_utils
-RUN cp libsvm/libsvm.so.2 tooplox_classifier/classifiers/svm_utils
+RUN cp liblinear/liblinear.so.1 $REPO_NAME/classifiers/svm_utils
+RUN cp libsvm/libsvm.so.2 $REPO_NAME/classifiers/svm_utils
 
-WORKDIR $HOME/tooplox_classifier
+WORKDIR $HOME/$REPO_NAME
 
-RUN python $REPO_NAME/download_dataset
+RUN python download_dataset.py

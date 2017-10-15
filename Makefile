@@ -14,4 +14,5 @@ build:
 notebook: build
 	$(DOCKER) run -it --net=host $(IMAGE_NAME)
 
-
+bash: build
+	$(DOCKER) run -it --net=host $(IMAGE_NAME) bash
