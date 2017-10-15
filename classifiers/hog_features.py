@@ -41,7 +41,7 @@ class HogVisualizer(object):
         plt.show()
 
 
-class HogDataSet(object):
+class HogGenerator(object):
     def __init__(self, visualize=False):
         self.pictures = None
         self.labels = None
@@ -74,9 +74,9 @@ class HogDataSet(object):
         return np.array([get_single_hog(picture, params) for picture in pictures])
 
 
-class HogTrainDataSet(HogDataSet):
+class TrainHogGenerator(HogGenerator):
     def __init__(self, data_set, hog_params=None, visualize=False):
-        super(HogTrainDataSet, self).__init__(visualize)
+        super(TrainHogGenerator, self).__init__(visualize)
         self.pictures = data_set.training_pictures
         self.labels = data_set.training_pictures_labels
         if visualize:
@@ -85,9 +85,9 @@ class HogTrainDataSet(HogDataSet):
         self.hog_params = hog_params if hog_params else dict()
 
 
-class HogTestDataSet(HogDataSet):
+class TestHogGenerator(HogGenerator):
     def __init__(self, data_set, hog_params=None, visualize=False):
-        super(HogTestDataSet, self).__init__()
+        super(TestHogGenerator, self).__init__()
         self.pictures = data_set.testing_pictures
         self.labels = data_set.testing_pictures_labels
         if visualize:
@@ -96,20 +96,20 @@ class HogTestDataSet(HogDataSet):
         self.hog_params = hog_params if hog_params else dict()
 
 
-class HogFeaturesGenerator(object):
+class HogFeaturesDataSet(object):
     def __init__(self, hog_parameters=None):
         self.hog_parameters = hog_parameters
 
     def get_hog_features(self, overwrite=True, visualize=False):
         data_set = get_data_set()
-        hog_train_data_set = HogTrainDataSet(data_set, self.hog_parameters, visualize)
-        hog_test_data_set = HogTestDataSet(data_set, self.hog_parameters, visualize)
+        train_hog_generator = TrainHogGenerator(data_set, self.hog_parameters, visualize)
+        test_hog_generator = TestHogGenerator(data_set, self.hog_parameters, visualize)
         if visualize:
-            HogVisualizer(hog_train_data_set).display_picture_with_hog()
+            HogVisualizer(train_hog_generator).display_picture_with_hog()
 
         feature_set = FeaturesDataSet()
-        self._set_train_features(feature_set, hog_train_data_set, overwrite)
-        self._set_test_features(feature_set, hog_test_data_set, overwrite)
+        self._set_train_features(feature_set, train_hog_generator, overwrite)
+        self._set_test_features(feature_set, test_hog_generator, overwrite)
 
         print("Number of features: " + str(len(feature_set.train_features[0])))
 

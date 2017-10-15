@@ -1,4 +1,4 @@
-from hog_features import HogFeaturesGenerator
+from hog_features import HogFeaturesDataSet
 from svm_wrappers import linear_classifier
 
 if __name__ == "__main__":
@@ -7,7 +7,7 @@ if __name__ == "__main__":
         'pixels_per_cell': (4, 4),
         'cells_per_block': (2, 2)
     }
-    features = HogFeaturesGenerator(parameters).get_hog_features(overwrite=False, visualize=True)
+    features = HogFeaturesDataSet(parameters).get_hog_features(overwrite=False, visualize=True)
 
     linear_classifier(features)
     print("successfully ends")
