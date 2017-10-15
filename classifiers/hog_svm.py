@@ -10,7 +10,7 @@ if __name__ == "__main__":
     features = HogFeaturesDataSet(parameters).get_hog_features(overwrite=False,
                                                                visualize=False)
     classifier = LinearClassifierGenerator()
-    classifier.classifier_generator(features, params="-s 2 -c 4 -B 1", save=False)
+    classifier.classifier_generator(features, params="-s 2 -c 4 -B 1", save=True)
     classifier.evaluate(features)
 
     print("successfully ends")

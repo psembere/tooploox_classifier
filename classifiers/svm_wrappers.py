@@ -2,10 +2,10 @@ import os
 
 import svm_utils.lib_svm.liblinearutil as liblinearutil
 import svm_utils.lib_svm.svmutil as svmutil
-from classifiers.globals import PROJECT_PATH
+from classifiers.globals import SERIALIZED_DATA_PATH
 
-linear_svm_path = os.path.join(PROJECT_PATH, "linear_svm")
-kernel_svm_path = os.path.join(PROJECT_PATH, "kernel_svm")
+linear_svm_path = os.path.join(SERIALIZED_DATA_PATH, "linear_svm")
+kernel_svm_path = os.path.join(SERIALIZED_DATA_PATH, "kernel_svm")
 
 
 class FeaturesDataSet(object):
@@ -35,13 +35,13 @@ class ClassifierGenerator(object):
         if save:
             self.saver(self.save_path, m)
             print(self.model_info, "saved")
-        print("Generated model accuracy:")
+        print("Generated model details:")
         print("acc ", p_acc[0], "mean_square ", p_acc[1], " correlation", p_acc[2])
 
     def evaluate(self, feature_set):
         m = self.loader(self.save_path)
         p_label, p_acc, p_val = self.predictor(feature_set.test_labels, feature_set.test_features, m)
-        print("Loaded model accuracy:")
+        print("Loaded model details:")
         print("acc ", p_acc[0], "mean_square ", p_acc[1], " correlation", p_acc[2])
 
 

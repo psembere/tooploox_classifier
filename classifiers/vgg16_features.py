@@ -8,7 +8,7 @@ from keras.preprocessing import image as keras_image
 
 from data_set_deserializer import get_data_set
 from globals import SERIALIZED_DATA_PATH
-from svm_wrappers import FeaturesDataSet, linear_classifier
+from svm_wrappers import FeaturesDataSet
 
 
 class Vgg16FeatureDataSet(object):
@@ -42,8 +42,10 @@ class Vgg16FeatureDataSet(object):
 
     def _get_vgg16_features(self, features_path, pictures, overwrite):
         if os.path.isfile(features_path) and not overwrite:
+            print("Load features")
             return np.load(features_path)
         else:
+            print("Get data")
             if not self.model:
                 self._set_model()
             vgg_features = np.array([self._get_cnn_code(idx, image) for idx, image in enumerate(pictures)])
