@@ -6,7 +6,7 @@ from classifiers.globals import SERIALIZED_DATA_PATH
 
 linear_svm_path = os.path.join(SERIALIZED_DATA_PATH, "linear_svm")
 kernel_svm_path = os.path.join(SERIALIZED_DATA_PATH, "kernel_svm")
-
+import time
 
 class FeaturesDataSet(object):
     def __init__(self):
@@ -28,18 +28,27 @@ class ClassifierGenerator(object):
         self.model_info = None
 
     def classifier_generator(self, feature_set, params="", save=True):
+        timestr = time.strftime("%d-%H-%M-%S")
+        print timestr
+
         prob = self.training_preparator(feature_set.train_labels, feature_set.train_features)
         param = self.parameter_generator(params)
         m = self.trainer(prob, param)
         p_label, p_acc, p_val = self.predictor(feature_set.test_labels, feature_set.test_features, m)
         if save:
+            path_to_save = self.save_path + self._get_timestamp()
             self.saver(self.save_path, m)
-            print(self.model_info, "saved")
+            print(self.model_info, " saved to ", path_to_save)
         print("Generated model details:")
         print("acc ", p_acc[0], "mean_square ", p_acc[1], " correlation", p_acc[2])
 
-    def evaluate(self, feature_set):
-        m = self.loader(self.save_path)
+    @staticmethod
+    def _get_timestamp():
+        return time.strftime("-%d-%H-%M-%S")
+
+    def evaluate(self, feature_set, path=None):
+        loading_path = self.save_path if path is None else path
+        m = self.loader(loading_path)
         p_label, p_acc, p_val = self.predictor(feature_set.test_labels, feature_set.test_features, m)
         print("Loaded model details:")
         print("acc ", p_acc[0], "mean_square ", p_acc[1], " correlation", p_acc[2])

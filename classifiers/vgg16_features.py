@@ -28,24 +28,28 @@ class Vgg16FeatureDataSet(object):
 
     def _set_train_features(self, data_set, feature_data_set, overwrite):
         train_features_path = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_train.npy')
+        print("Train features:")
         train_features_np = self._get_vgg16_features(train_features_path, data_set.training_pictures, overwrite)
+        print("generating finish")
 
         feature_data_set.train_features = train_features_np.tolist()
         feature_data_set.train_labels = data_set.training_pictures_labels
 
     def _set_test_features(self, data_set, feature_data_set, overwrite):
         test_features_path = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_test.npy')
+        print("Test features:")
         test_features_np = self._get_vgg16_features(test_features_path, data_set.testing_pictures, overwrite)
+        print("generating finish")
 
         feature_data_set.test_features = test_features_np.tolist()
         feature_data_set.test_labels = data_set.testing_pictures_labels
 
     def _get_vgg16_features(self, features_path, pictures, overwrite):
         if os.path.isfile(features_path) and not overwrite:
-            print("Load features")
+            print("Loading features")
             return np.load(features_path)
         else:
-            print("Get data")
+            print("Getting data")
             if not self.model:
                 self._set_model()
             vgg_features = np.array([self._get_cnn_code(idx, image) for idx, image in enumerate(pictures)])
