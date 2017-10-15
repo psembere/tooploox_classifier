@@ -83,3 +83,5 @@ RUN cp liblinear/liblinear.so.1 tooplox_classifier/classifiers/svm_utils
 RUN cp libsvm/libsvm.so.2 tooplox_classifier/classifiers/svm_utils
 
 WORKDIR $HOME/tooplox_classifier
+
+RUN python download_dataset
