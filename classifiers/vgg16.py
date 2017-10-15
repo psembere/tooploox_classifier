@@ -10,8 +10,8 @@ from globals import SERIALIZED_DATA_PATH
 from svm_wrappers import FeaturesDataSet, linear_classifier
 
 
-def get_vgg16_features(cnn_model, img_path, pictures, reload=False):
-    if os.path.isfile(img_path) and not reload:
+def get_vgg16_features(cnn_model, img_path, pictures, overwrite=False):
+    if os.path.isfile(img_path) and not overwrite:
         return np.load(img_path)
     else:
         return generate_vgg16_features(cnn_model, img_path, pictures)
@@ -36,30 +36,34 @@ def _prepare_picture(img):
     return preprocess_input(img_expanded)
 
 
-def get_features(model, reload=False):
+def get_features(overwrite=False):
+    cnn_model = VGG16(weights='imagenet', include_top=False)
     data_set = get_data_set()
-    pictures_train = data_set.training_pictures
-    pictures_test = data_set.testing_pictures
+    feature_data_set = FeaturesDataSet()
 
-    img_path_train = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_train.npy')
-    img_path_test = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_test.npy')
+    _set_test_features(data_set, feature_data_set, cnn_model, overwrite)
+    _set_train_features(data_set, feature_data_set, cnn_model, overwrite)
+    return feature_data_set
 
-    features_test = get_vgg16_features(model, img_path_test, pictures_test, reload).tolist()
-    features_train = get_vgg16_features(model, img_path_train, pictures_train, reload).tolist()
 
-    features = FeaturesDataSet()
-    features.train_features = features_train
-    features.test_features = features_test
-    features.train_labels = data_set.training_pictures_labels
-    features.test_labels = data_set.testing_pictures_labels
+def _set_train_features(data_set, feature_data_set, cnn_model, overwrite):
+    train_features_path = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_train.npy')
+    train_features_np = get_vgg16_features(cnn_model, train_features_path, data_set.training_pictures, overwrite)
 
-    return features
+    feature_data_set.train_features = train_features_np.tolist()
+    feature_data_set.train_labels = data_set.training_pictures_labels
+
+
+def _set_test_features(data_set, feature_data_set, model, overwrite):
+    test_features_path = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_test.npy')
+    test_features_np = get_vgg16_features(model, test_features_path, data_set.testing_pictures, overwrite)
+
+    feature_data_set.test_features = test_features_np.tolist()
+    feature_data_set.test_labels = data_set.testing_pictures_labels
 
 
 if __name__ == "__main__":
-    model = VGG16(weights='imagenet', include_top=False)
-
-    features = get_features(model, reload=False)
+    features = get_features(overwrite=True)
 
     linear_classifier(features)
 
