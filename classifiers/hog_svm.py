@@ -1,5 +1,5 @@
 from hog_features import HogFeaturesDataSet
-from svm_wrappers import linear_classifier_generate, linear_classifier_evaluate
+from svm_wrappers import LinearClassifierGenerator
 
 if __name__ == "__main__":
     parameters = {
@@ -9,8 +9,8 @@ if __name__ == "__main__":
     }
     features = HogFeaturesDataSet(parameters).get_hog_features(overwrite=False,
                                                                visualize=False)
-    linear_classifier_generate(features, params="-c 4 -B 1")
-    linear_classifier_evaluate(features)
+    classifier = LinearClassifierGenerator()
+    classifier.classifier_generator(features, params="-s 2 -c 4 -B 1", save=False)
+    classifier.evaluate(features)
 
-    # kernel_classifier(features)
     print("successfully ends")
