@@ -65,7 +65,7 @@ USER keras
 RUN pip install tsne
 
 ### repository
-ENV REPO_NAME tooplox_classifier
+ENV REPO_NAME tooploox_classifier
 RUN git clone https://github.com/semberecki/$REPO_NAME.git
 
 #SVM libs
@@ -84,4 +84,4 @@ RUN cp libsvm/libsvm.so.2 tooplox_classifier/classifiers/svm_utils
 
 WORKDIR $HOME/tooplox_classifier
 
-RUN python download_dataset
+RUN python $REPO_NAME/download_dataset
