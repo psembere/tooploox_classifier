@@ -5,9 +5,9 @@ from keras.applications.vgg16 import VGG16
 from keras.applications.vgg16 import preprocess_input
 from keras.preprocessing import image
 
-from classifiers.svm_wrappers import FeaturesLabelsDataSet, linear_classifier
+from svm_wrappers import FeaturesLabelsDataSet, linear_classifier
 from utils.data_loader import get_data_set
-from utils.globals import PROJECT_PATH, SERIALIZED_DATA_PATH
+from utils.globals import SERIALIZED_DATA_PATH
 
 
 def get_vgg16_features(model, img_path, pictures, reload=False):

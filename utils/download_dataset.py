@@ -2,7 +2,7 @@ import os
 import tarfile
 import urllib
 
-from utils.globals import UTILS_DIR_PATH
+from globals import UTILS_DIR_PATH
 
 DATA_SET_FILENAME_TAR = "cifar-10-python.tar.gz"
 DATA_SET_FILENAME_PATH = os.path.join(UTILS_DIR_PATH, "..", DATA_SET_FILENAME_TAR)

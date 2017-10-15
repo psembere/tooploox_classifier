@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import itertools
 import sys
 
-from utils.globals import DATA_SET_PATH, RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y
+from globals import DATA_SET_PATH, RGB_CHANNELS, IMAGE_DIM_X, IMAGE_DIM_Y
 
 
 def unpickle(file_path):
