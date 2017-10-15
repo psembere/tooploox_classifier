@@ -1,5 +1,5 @@
 from hog_features import HogTrainDataSet, HogTestDataSet
-from svm_wrappers import linear_classifier, FeaturesLabelsDataSet
+from svm_wrappers import linear_classifier, FeaturesDataSet
 from data_set_deserializer import get_data_set
 
 
@@ -10,7 +10,7 @@ def get_hog_features(hog_params=None, overwrite=True, visualize=False):
     if visualize:
         hog_train_data_set.display_picture_with_hog()
 
-    feature_set = FeaturesLabelsDataSet()
+    feature_set = FeaturesDataSet()
     _set_train_features(feature_set, hog_train_data_set, overwrite)
     _set_test_features(feature_set, hog_test_data_set, overwrite)
 

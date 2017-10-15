@@ -8,7 +8,7 @@ def linear_classifier(feature_set):
     p_label, p_acc, p_val = liblinearutil.predict(feature_set.test_labels, feature_set.test_features, m)
 
 
-class FeaturesLabelsDataSet(object):
+class FeaturesDataSet(object):
     def __init__(self):
         self.train_features = None
         self.train_labels = None

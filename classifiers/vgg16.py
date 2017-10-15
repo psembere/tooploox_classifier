@@ -7,39 +7,33 @@ from keras.preprocessing import image
 
 from data_set_deserializer import get_data_set
 from globals import SERIALIZED_DATA_PATH
-from svm_wrappers import FeaturesLabelsDataSet, linear_classifier
+from svm_wrappers import FeaturesDataSet, linear_classifier
 
 
 def get_vgg16_features(cnn_model, img_path, pictures, reload=False):
     if os.path.isfile(img_path) and not reload:
-        features = np.load(img_path)
+        return np.load(img_path)
     else:
-        features = generate_vgg16_features(cnn_model, img_path, pictures)
-    return features
-
-
-def get_list_from_np(array):
-    if type(array).__module__ == np.__name__:
-        return array.tolist()
-    elif type(array[0]).__module__ == np.__name__:
-        return [ar.tolist() for ar in array]
-    else:
-        return array
+        return generate_vgg16_features(cnn_model, img_path, pictures)
 
 
 def generate_vgg16_features(model, img_path, pictures):
     features = []
     idx = 0
     for img in pictures:
-        x = image.img_to_array(img)
-        x = np.expand_dims(x, axis=0)
-        x = preprocess_input(x)
+        x = _prepare_picture(img)
         features.append(model.predict(x)[0][0][0])
         if idx % 1000 == 0:
             print(idx)
         idx += 1
     np.save(img_path, features)
-    return features
+    return np.array(features)
+
+
+def _prepare_picture(img):
+    img_converted = image.img_to_array(img)
+    img_expanded = np.expand_dims(img_converted, axis=0)
+    return preprocess_input(img_expanded)
 
 
 def get_features(model, reload=False):
@@ -50,16 +44,16 @@ def get_features(model, reload=False):
     img_path_train = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_train.npy')
     img_path_test = os.path.join(SERIALIZED_DATA_PATH, 'vgg16_test.npy')
 
-    features_test = get_vgg16_features(model, img_path_test, pictures_test, reload)
-    features_train = get_vgg16_features(model, img_path_train, pictures_train, reload)
+    features_test = get_vgg16_features(model, img_path_test, pictures_test, reload).tolist()
+    features_train = get_vgg16_features(model, img_path_train, pictures_train, reload).tolist()
 
-    features_labels_data_set = FeaturesLabelsDataSet()
-    features_labels_data_set.train_features = get_list_from_np(features_train)
-    features_labels_data_set.test_features = get_list_from_np(features_test)
-    features_labels_data_set.train_labels = get_list_from_np(data_set.training_pictures_labels)
-    features_labels_data_set.test_labels = get_list_from_np(data_set.testing_pictures_labels)
+    features = FeaturesDataSet()
+    features.train_features = features_train
+    features.test_features = features_test
+    features.train_labels = data_set.training_pictures_labels
+    features.test_labels = data_set.testing_pictures_labels
 
-    return features_labels_data_set
+    return features
 
 
 if __name__ == "__main__":
