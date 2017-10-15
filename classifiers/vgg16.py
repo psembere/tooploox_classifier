@@ -84,8 +84,27 @@ def visualize_features(features):
     plt.show()
 
 
+def visualize_features_sklearn(features):
+    from time import time
+    import matplotlib.pyplot as plt
+    from sklearn import manifold
+
+    t0 = time()
+    tsne = manifold.TSNE(n_components=2, init='pca', random_state=0)
+    Y = tsne.fit_transform(features.train_features[0:1000])
+    t1 = time()
+    print("t-SNE: %.2g sec" % (t1 - t0))
+
+    plt.scatter(Y[:, 0], Y[:, 1], c=features.train_labels[0:1000], cmap=plt.cm.Spectral)
+    plt.title("t-SNE (%.2g sec)" % (t1 - t0))
+    plt.axis('tight')
+
+    plt.show()
+
+
 if __name__ == "__main__":
     features = Vgg16FeatureDataSet().get_features(overwrite=False)
     # linear_classifier(features)
-    visualize_features(features)
+    # visualize_features(features)
+    visualize_features_sklearn(features)
     print("successfully ends")
