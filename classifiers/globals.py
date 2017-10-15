@@ -7,11 +7,8 @@ EXTRACTED_DATA_SET_PATH = os.path.join(PROJECT_PATH, EXTRACTED_DATA_SET_DIR_NAME
 
 CHANGE_SERIALIZATION_PATH = False
 
-if CHANGE_SERIALIZATION_PATH:
-    SERIALIZED_DATA_PATH = "/Users/piotr/workspace/mac_rl/tooplox_classifier/data"
-    print("warning: remote debug path set")
-else:
-    SERIALIZED_DATA_PATH = os.path.join(PROJECT_PATH, "data")
+
+SERIALIZED_DATA_PATH = os.path.join(PROJECT_PATH, "serialized_features")
 
 IMAGE_DIM_X = 32
 IMAGE_DIM_Y = 32
