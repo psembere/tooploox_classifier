@@ -55,7 +55,5 @@ class Vgg16FeatureGenerator(object):
 
 if __name__ == "__main__":
     features = Vgg16FeatureGenerator().get_features(overwrite=True)
-
     linear_classifier(features)
-
     print("successfully ends")
