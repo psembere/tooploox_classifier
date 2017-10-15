@@ -11,36 +11,6 @@ from globals import SERIALIZED_DATA_PATH
 from svm_wrappers import FeaturesDataSet
 
 
-class HogVisualizer(object):
-    def __init__(self, data_set):
-        self.pictures = data_set.pictures
-        self.hog_params = data_set.hog_params
-        self.labels_text = data_set.labels_text
-
-    def display_picture_with_hog(self, idx=0):
-        image = color.rgb2gray(self.pictures[idx])
-        params = deepcopy(self.hog_params)
-        params['visualize'] = True
-        params['image'] = image
-        fd, hog_image = hog(**params)
-
-        self._plot_hog(idx, image, hog_image)
-
-    def _plot_hog(self, idx, image, hog_image):
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4), sharex=True, sharey=True)
-        ax1.axis('off')
-        ax1.imshow(image, cmap=plt.cm.gray)
-        ax1.set_title('Input image ' + self.labels_text[idx])
-        ax1.set_adjustable('box-forced')
-        # Rescale histogram for better display
-        hog_image_rescaled = exposure.rescale_intensity(hog_image, in_range=(0, 0.02))
-        ax2.axis('off')
-        ax2.imshow(hog_image_rescaled, cmap=plt.cm.gray)
-        ax2.set_title('Histogram of Oriented Gradients')
-        ax1.set_adjustable('box-forced')
-        plt.show()
-
-
 class HogGenerator(object):
     def __init__(self, visualize=False):
         self.pictures = None
@@ -94,6 +64,36 @@ class TestHogGenerator(HogGenerator):
             self.labels_text = data_set.get_testing_labels_text()
         self.hog_file = 'hog_test_pictures.npy'
         self.hog_params = hog_params if hog_params else dict()
+
+
+class HogVisualizer(object):
+    def __init__(self, data_set):
+        self.pictures = data_set.pictures
+        self.hog_params = data_set.hog_params
+        self.labels_text = data_set.labels_text
+
+    def display_picture_with_hog(self, idx=0):
+        image = color.rgb2gray(self.pictures[idx])
+        params = deepcopy(self.hog_params)
+        params['visualize'] = True
+        params['image'] = image
+        fd, hog_image = hog(**params)
+
+        self._plot_hog(idx, image, hog_image)
+
+    def _plot_hog(self, idx, image, hog_image):
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4), sharex=True, sharey=True)
+        ax1.axis('off')
+        ax1.imshow(image, cmap=plt.cm.gray)
+        ax1.set_title('Input image ' + self.labels_text[idx])
+        ax1.set_adjustable('box-forced')
+        # Rescale histogram for better display
+        hog_image_rescaled = exposure.rescale_intensity(hog_image, in_range=(0, 0.02))
+        ax2.axis('off')
+        ax2.imshow(hog_image_rescaled, cmap=plt.cm.gray)
+        ax2.set_title('Histogram of Oriented Gradients')
+        ax1.set_adjustable('box-forced')
+        plt.show()
 
 
 class HogFeaturesDataSet(object):

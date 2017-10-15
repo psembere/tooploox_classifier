@@ -10,7 +10,7 @@ from globals import SERIALIZED_DATA_PATH
 from svm_wrappers import FeaturesDataSet, linear_classifier
 
 
-class Vgg16FeatureGenerator(object):
+class Vgg16FeatureDataSet(object):
     def __init__(self):
         self.model = VGG16(weights='imagenet', include_top=False)
 
@@ -54,6 +54,6 @@ class Vgg16FeatureGenerator(object):
 
 
 if __name__ == "__main__":
-    features = Vgg16FeatureGenerator().get_features(overwrite=True)
+    features = Vgg16FeatureDataSet().get_features(overwrite=True)
     linear_classifier(features)
     print("successfully ends")

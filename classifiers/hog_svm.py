@@ -7,7 +7,7 @@ if __name__ == "__main__":
         'pixels_per_cell': (4, 4),
         'cells_per_block': (2, 2)
     }
-    features = HogFeaturesDataSet(parameters).get_hog_features(overwrite=False, visualize=True)
+    features = HogFeaturesDataSet(parameters).get_hog_features(overwrite=False, visualize=False)
 
     linear_classifier(features)
     print("successfully ends")
