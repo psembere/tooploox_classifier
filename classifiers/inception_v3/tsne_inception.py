@@ -1,11 +1,11 @@
 #
-#  tsne.py
+#  tsne_inception.py
 #
 # Implementation of t-SNE in Python. The implementation was tested on Python 2.7.10, and it requires a working
 # installation of NumPy. The implementation comes with an example on the MNIST dataset. In order to plot the
 # results of this example, a working installation of matplotlib is required.
 #
-# The example can be run by executing: `ipython tsne.py`
+# The example can be run by executing: `ipython tsne_inception.py`
 #
 #
 #  Created by Laurens van der Maaten on 20-12-08.

@@ -1,10 +1,9 @@
 from matplotlib import pyplot as plt
 from time import time
-
+import numpy as np
+from tsne import bh_sne
 
 def visualize_features_pypl_tsne_fast(features, number_of_features=1000):
-    import numpy as np
-    from tsne import bh_sne
 
     # load up data
     x_data = features.train_features

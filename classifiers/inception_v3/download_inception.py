@@ -31,3 +31,12 @@ def prepare_inception():
 
     os.mkdir(DATA_SETS_PATH)
     shutil.copytree(EXTRACTED_DATA_SET_PATH, CIFAR_COPY)
+
+
+def generate_inception_features():
+    serialized_data_path = os.path.join(INCEPTION_PATH, "X_train.npy")
+    if not os.path.isfile(serialized_data_path):
+        print("generate")
+        execfile(os.path.join(INCEPTION_PATH, "transfer_cifar10_softmax.py"))
+    else:
+        print("features generated")

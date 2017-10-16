@@ -11,7 +11,7 @@ from data_utils import load_CIFAR10
 from extract import create_graph, iterate_mini_batches, batch_pool3_features
 from datetime import datetime
 import matplotlib.pyplot as plt
-from tsne import tsne
+from tsne_inception import tsne
 import seaborn as sns
 import pandas as pd
 
@@ -20,7 +20,7 @@ import pandas as pd
 # #
 
 #flag to generate and save bottleneck features
-DO_SERIALIZATION = False
+DO_SERIALIZATION = True
 
 def load_pool3_data():
     # Update these file names after you serialize pool_3 values
