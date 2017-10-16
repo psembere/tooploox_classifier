@@ -1,4 +1,4 @@
-# tooplox_classifier
+# Tooploox Cifar10 Classifier
 
 for creating docker container with required versions of software to develop classifiers run: <br /> <br />
  __make__
