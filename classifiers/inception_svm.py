@@ -17,7 +17,7 @@ def load_cifar_features():
     return features
 
 
-def add_augmented_feautres(features):
+def add_augmented_features(features):
     train_augmented_features = np.load(os.path.join(INCEPTION_PATH, "X_train_augmented.npy")).tolist()
     train_augmented_labels = np.load(os.path.join(INCEPTION_PATH, "y_train_augmented.npy")).tolist()
 
@@ -26,7 +26,7 @@ def add_augmented_feautres(features):
 
 if __name__ == "__main__":
     features = load_cifar_features()
-    add_augmented_feautres(features)
+    add_augmented_features(features)
 
     # visualize_features_pypl_tsne_fast(features, 10000)
 
