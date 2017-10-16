@@ -7,7 +7,8 @@ from download_utils import download_data_set, extract_tar
 TAR_DATA_SET_FILENAME = "cifar-10-python.tar.gz"
 URL = "https://www.cs.toronto.edu/~kriz/" + TAR_DATA_SET_FILENAME
 
-if __name__ == "__main__":
+
+def prepare_dataset():
     if not os.path.exists(EXTRACTED_DATA_SET_DIR_NAME):
         print ("cifar data set downloading")
         download_data_set(URL, TAR_DATA_SET_FILENAME)
@@ -21,3 +22,7 @@ if __name__ == "__main__":
 
     if not os.path.exists(INCEPTION_RESOURCES_PATH):
         prepare_inception()
+
+
+if __name__ == "__main__":
+    prepare_dataset()

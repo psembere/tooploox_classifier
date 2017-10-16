@@ -17,8 +17,16 @@ def load_cifar_features():
     return features
 
 
+def add_augmented_feautres(features):
+    train_augmented_features = np.load(os.path.join(INCEPTION_PATH, "X_train_augmented.npy")).tolist()
+    train_augmented_labels = np.load(os.path.join(INCEPTION_PATH, "y_train_augmented.npy")).tolist()
+
+    features.train_features += train_augmented_features
+    features.train_labels += train_augmented_labels
+
 if __name__ == "__main__":
     features = load_cifar_features()
+    add_augmented_feautres(features)
 
     # visualize_features_pypl_tsne_fast(features, 10000)
 
@@ -29,6 +37,7 @@ if __name__ == "__main__":
     # linear_classifier.classifier_generator(features, params="-s 2", save=True) #89
     # linear_classifier.classifier_generator(features, params="-c 4 -B 1", save=True) #86
 
+    linear_classifier.classifier_generator(features, params="", save=True)  # 87, 88.43 with augmentation
     # kernel_classifier.classifier_generator(features, params="-h 0", save=True)
     # kernel_classifier.classifier_generator(features, params="", save=True)
 
