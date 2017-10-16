@@ -53,6 +53,9 @@ RUN pip install -r requirements.txt
 RUN conda install Cython
 RUN pip install .
 
+#opencv
+RUN conda install -c conda-forge opencv
+
 WORKDIR $HOME
 # optional cleaning
 # RUN rm -rf scikit-image
