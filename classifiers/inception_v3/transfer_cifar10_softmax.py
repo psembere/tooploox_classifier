@@ -22,7 +22,7 @@ def serialize_cifar_pool3(X, filename):
     print 'About to generate file: %s' % filename
     sess = tf.InteractiveSession()
     X_pool3 = batch_pool3_features(sess, X)
-    np.save(INCEPTION_PATH + "/ " + filename, X_pool3)
+    np.save(INCEPTION_PATH + "/" + filename, X_pool3)
 
 
 def serialize_data():
@@ -33,7 +33,7 @@ def serialize_data():
     np.save(INCEPTION_PATH + '/y_test', y_test)
 
 
-def serialize_data_with_augmentation(iterations=100, batch_size=100):
+def serialize_augmented_data(iterations=100, batch_size=100):
     # 1000 x 100 = 10 000 new samples
     image_generator = get_image_generator(batch_size)
     images, labels = image_generator.next()

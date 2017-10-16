@@ -25,6 +25,9 @@ def add_augmented_features(features):
     features.train_labels += train_augmented_labels
 
 if __name__ == "__main__":
+    from classifiers.inception_features import generate_inception_features
+    generate_inception_features(generate_augmentation=True)
+
     features = load_cifar_features()
     add_augmented_features(features)
 

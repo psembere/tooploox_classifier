@@ -1,7 +1,7 @@
 import os
 
 from classifiers.inception_v3.download_inception import INCEPTION_PATH
-from classifiers.inception_v3.transfer_cifar10_softmax import serialize_data, serialize_data_with_augmentation
+from classifiers.inception_v3.transfer_cifar10_softmax import serialize_data, serialize_augmented_data
 
 
 def generate_inception_features(generate_augmentation=True):
@@ -14,4 +14,4 @@ def generate_inception_features(generate_augmentation=True):
         print("features generated")
 
     if generate_augmentation:
-        serialize_data_with_augmentation()
+        serialize_augmented_data()

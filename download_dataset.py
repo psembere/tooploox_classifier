@@ -22,6 +22,8 @@ def prepare_data():
 
     if not os.path.exists(INCEPTION_RESOURCES_PATH):
         prepare_inception()
+    else:
+        print("inception prepared")
 
 
 if __name__ == "__main__":
