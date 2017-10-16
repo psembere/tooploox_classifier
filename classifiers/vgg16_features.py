@@ -32,7 +32,6 @@ class Vgg16FeatureDataSet(object):
         print("getting train features finish")
 
         feature_data_set.train_features = train_features_np.tolist()
-        del train_features_np
         feature_data_set.train_labels = data_set.training_pictures_labels
 
     def _set_test_features(self, data_set, feature_data_set, overwrite):
@@ -59,8 +58,8 @@ class Vgg16FeatureDataSet(object):
     def _get_cnn_code(self, idx, image):
         if idx % 1000 == 0:
             print(idx)
-        image_resized = scipy.misc.imresize(image, (224, 224))
-        img_converted = keras_image.img_to_array(image_resized)
+        #image_resized = scipy.misc.imresize(image, (224, 224))
+        img_converted = keras_image.img_to_array(image)
         img_expanded = np.expand_dims(img_converted, axis=0)
         x = preprocess_input(img_expanded)
         return self.model.predict(x).flatten()
