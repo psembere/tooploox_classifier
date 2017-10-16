@@ -22,7 +22,14 @@ if __name__ == "__main__":
 
     # visualize_features_pypl_tsne_fast(features, 10000)
 
-    classifier = LinearClassifierGenerator()
-    #classifier.classifier_generator(features, params="", save=True)
-    classifier.classifier_generator(features, params="-s 2", save=True)
+    linear_classifier = LinearClassifierGenerator()
+    kernel_classifier = KernelClassifierGenerator()
+
+    # linear_classifier.classifier_generator(features, params="", save=True) #87
+    # linear_classifier.classifier_generator(features, params="-s 2", save=True) #89
+    # linear_classifier.classifier_generator(features, params="-c 4 -B 1", save=True) #86
+
+
+    kernel_classifier.classifier_generator(features,  params="-h 0", save=True)
+    # kernel_classifier.classifier_generator(features,  params="", save=True)
 
