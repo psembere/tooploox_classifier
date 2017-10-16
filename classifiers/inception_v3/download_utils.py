@@ -11,7 +11,7 @@ def download_data_set(url, tar_file):
         urllib.request.urlretrieve(url, tar_file)
 
 
-def extract(tar_file):
+def extract_tar(tar_file, path="."):
     tar = tarfile.open(tar_file, "r:gz")
-    tar.extractall()
+    tar.extractall(path)
     tar.close()
