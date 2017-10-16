@@ -56,7 +56,7 @@ class Vgg16FeatureDataSet(object):
             return vgg_features
 
     def _get_cnn_code(self, idx, image):
-        if idx % 1000 == 0:
+        if idx % 10000 == 0:
             print(idx)
         #image_resized = scipy.misc.imresize(image, (224, 224))
         img_converted = keras_image.img_to_array(image)

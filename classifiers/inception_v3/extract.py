@@ -39,7 +39,8 @@ def batch_pool3_features(sess, X_input):
     pool3 = sess.graph.get_tensor_by_name('pool_3:0')
     X_pool3 = []
     for i in range(n_train):
-        print 'Iteration %i' % i
+        if i % 10000 ==0:
+            print 'Iteration %i' % i
         pool3_features = sess.run(pool3, {'DecodeJpeg:0': X_input[i, :]})
         X_pool3.append(np.squeeze(pool3_features))
     return np.array(X_pool3)

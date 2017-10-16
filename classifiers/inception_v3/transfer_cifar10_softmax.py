@@ -38,7 +38,7 @@ def serialize_augmented_data(iterations=100, batch_size=100):
     image_generator = get_image_generator(batch_size)
     images, labels = image_generator.next()
 
-    print("augmentation")
+    print("augmentation", "batch size", 100)
     for idx in xrange(1, iterations):
         new_images, new_labels = image_generator.next()
         images = np.concatenate([images, new_images])
