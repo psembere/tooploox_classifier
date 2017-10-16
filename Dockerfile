@@ -87,6 +87,4 @@ RUN cp libsvm/libsvm.so.2 $REPO_NAME/classifiers/svm_utils
 
 WORKDIR $HOME/$REPO_NAME
 
-RUN python download_dataset.py
-
 RUN pip install seaborn
