@@ -31,10 +31,7 @@ class ClassifierGenerator(object):
         print(self._get_timestamp())
 
         prob = self.training_preparator(feature_set.train_labels, feature_set.train_features)
-        if params:
-            param = self.parameter_generator(params)
-        else:
-            param = None
+        param = self.parameter_generator(params) if params else None
         m = self.trainer(prob, param)
         p_label, p_acc, p_val = self.predictor(feature_set.test_labels, feature_set.test_features, m)
         if save:

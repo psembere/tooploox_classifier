@@ -23,5 +23,6 @@ if __name__ == "__main__":
     # visualize_features_pypl_tsne_fast(features, 10000)
 
     classifier = LinearClassifierGenerator()
-    classifier.classifier_generator(features, params="", save=True)
+    #classifier.classifier_generator(features, params="", save=True)
+    classifier.classifier_generator(features, params="-s 2", save=True)
 
