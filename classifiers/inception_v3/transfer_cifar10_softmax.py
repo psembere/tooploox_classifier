@@ -47,4 +47,4 @@ def serialize_augmented_data(iterations=100, batch_size=100):
             print(idx)
 
     serialize_cifar_pool3(images, 'X_train_augmented')
-    np.save('y_train_augmented', labels)
+    np.save(INCEPTION_PATH + "/" + 'y_train_augmented', labels)
