@@ -13,4 +13,7 @@ This repostitory contains three approaches to classification based on transfer l
  - Inception V3 with features from pool3:0 layer from Tensorflow + SVM
  
  
- The SVM are used from liblinear and libsvm libraries with Python wrappers
+ The SVM are used from liblinear and libsvm libraries with Python wrappers.
+ 
+ There is also used some data augmentation for inception features.<br />  
+ There is generated over 10000 new images.
