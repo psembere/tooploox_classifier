@@ -7,6 +7,8 @@ from PIL import Image
 import tensorflow as tf
 import numpy as np
 from sklearn import cross_validation
+
+from classifiers.inception_v3.data_augmentation import get_image_generator
 from data_utils import load_CIFAR10
 from extract import create_graph, iterate_mini_batches, batch_pool3_features
 from datetime import datetime
@@ -21,6 +23,12 @@ import pandas as pd
 
 #flag to generate and save bottleneck features
 DO_SERIALIZATION = True
+DO_AUGMENTATION = True
+
+
+classes = np.array(['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck'])
+cifar10_dir = 'resources/datasets/cifar-10-batches-py'
+
 
 def load_pool3_data():
     # Update these file names after you serialize pool_3 values
@@ -43,13 +51,30 @@ def serialize_data():
     np.save('y_train',y_train)
     np.save('y_test',y_test)
 
+def serialize_data_with_augmentation(iterations=100):
+    # 1000 x 100 = 10 000 new samples
+    image_generator = get_image_generator()
+    images, labels = image_generator.next()
 
-classes = np.array(['plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck'])
-cifar10_dir = 'resources/datasets/cifar-10-batches-py'
+    for idx in xrange(1, iterations):
+        new_images, new_labels = image_generator.next()
+        images= np.concatenate([images, new_images])
+        labels= np.concatenate([labels, new_labels])
+        if idx%10==0:
+            print(idx)
+
+    serialize_cifar_pool3(images, 'X_train_augmented')
+    np.save('y_train_augmented',labels)
+
 
 if DO_SERIALIZATION:
-    serialize_data()
-    exit(0)
+
+    if not DO_AUGMENTATION:
+        serialize_data()
+        exit(0)
+    else:
+        serialize_data_with_augmentation()
+        exit(0)
 
 X_train_orig, y_train_orig, X_test_orig, y_test_orig = load_CIFAR10(cifar10_dir)
 X_train_pool3, y_train_pool3, X_test_pool3, y_test_pool3 = load_pool3_data()
