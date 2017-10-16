@@ -19,9 +19,9 @@ CIFAR_COPY = os.path.join(DATA_SETS_PATH, EXTRACTED_DATA_SET_DIR_NAME)
 
 
 def prepare_inception():
-    print ("inception data set downloading")
+    print ("inception weights downloading")
     download_data_set(INCEPTION_V3_URL, DOWNLOADED_INCEPTION)
-    print ("inception data downloaded")
+    print ("inception weights downloaded")
 
     os.mkdir(INCEPTION_RESOURCES_PATH)
 

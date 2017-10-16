@@ -2,7 +2,10 @@ from tensorflow.python.platform import gfile
 import tensorflow as tf
 import numpy as np
 
-model = 'resources/classify_image_graph_def.pb'
+from classifiers.inception_v3.download_inception import INCEPTION_PATH
+
+model = INCEPTION_PATH + '/resources/classify_image_graph_def.pb'
+
 
 def create_graph():
     """"Creates a graph from saved GraphDef file and returns a saver."""
@@ -16,15 +19,16 @@ def create_graph():
     return sess.graph
 
 
-def pool3_features(sess,X_input):
+def pool3_features(sess, X_input):
     """
     Call create_graph() before calling this
     """
     pool3 = sess.graph.get_tensor_by_name('pool_3:0')
-    pool3_features = sess.run(pool3,{'DecodeJpeg:0': X_input[i,:]})
-    return np.squeeze(pool3_features)
+    pool3_features_tf = sess.run(pool3, {'DecodeJpeg:0': X_input[i, :]})
+    return np.squeeze(pool3_features_tf)
 
-def batch_pool3_features(sess,X_input):
+
+def batch_pool3_features(sess, X_input):
     """
     Currently tensorflow can't extract pool3 in batch so this is slow:
     https://github.com/tensorflow/tensorflow/issues/1021
@@ -36,12 +40,6 @@ def batch_pool3_features(sess,X_input):
     X_pool3 = []
     for i in range(n_train):
         print 'Iteration %i' % i
-        pool3_features = sess.run(pool3,{'DecodeJpeg:0': X_input[i,:]})
+        pool3_features = sess.run(pool3, {'DecodeJpeg:0': X_input[i, :]})
         X_pool3.append(np.squeeze(pool3_features))
     return np.array(X_pool3)
-
-def iterate_mini_batches(X_input,Y_input,batch_size):
-    n_train = X_input.shape[0]
-    for ndx in range(0, n_train, batch_size):
-        yield X_input[ndx:min(ndx + batch_size, n_train)], Y_input[ndx:min(ndx + batch_size, n_train)]
-

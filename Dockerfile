@@ -86,5 +86,3 @@ RUN cp liblinear/liblinear.so.1 $REPO_NAME/classifiers/svm_utils
 RUN cp libsvm/libsvm.so.2 $REPO_NAME/classifiers/svm_utils
 
 WORKDIR $HOME/$REPO_NAME
-
-RUN pip install seaborn

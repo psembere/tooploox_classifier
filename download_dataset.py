@@ -8,14 +8,14 @@ TAR_DATA_SET_FILENAME = "cifar-10-python.tar.gz"
 URL = "https://www.cs.toronto.edu/~kriz/" + TAR_DATA_SET_FILENAME
 
 
-def prepare_dataset():
+def prepare_data():
     if not os.path.exists(EXTRACTED_DATA_SET_DIR_NAME):
-        print ("cifar data set downloading")
+        print("cifar10 data set downloading")
         download_data_set(URL, TAR_DATA_SET_FILENAME)
         extract_tar(TAR_DATA_SET_FILENAME)
         os.remove(TAR_DATA_SET_FILENAME)
     else:
-        print("cifar data set loaded")
+        print("cifar10 data set loaded")
 
     if not os.path.exists(SERIALIZED_DATA_PATH):
         os.makedirs(SERIALIZED_DATA_PATH)
@@ -25,4 +25,4 @@ def prepare_dataset():
 
 
 if __name__ == "__main__":
-    prepare_dataset()
+    prepare_data()
