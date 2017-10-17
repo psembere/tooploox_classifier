@@ -15,5 +15,4 @@ This repostitory contains three approaches to classification based on transfer l
  
  The SVM is used from liblinear and libsvm libraries with Python wrappers.
  
- There is also used some data augmentation for inception features.<br />  
- There is generated over 10000 new images.
+ There is also used some data augmentation for inception features with over 10000 new images.
